@@ -97,7 +97,7 @@ void sandSim(int x, int y)
 	{
 		if (getTempBoard(x - direction, y + 1) == 0 or getTempBoard(x - direction, y + 1) == 2)//check that spot is still empty
 		{
-			setTempBoard(x, y, getTempBoard(x, y + 1));//swap spots
+			setTempBoard(x, y, getTempBoard(x - direction, y + 1));//swap spots
 			setTempBoard(x - direction, y + 1, 1);
 			return;
 		}
@@ -106,7 +106,7 @@ void sandSim(int x, int y)
 	{
 		if (getTempBoard(x + direction, y + 1) == 0 or getTempBoard(x + direction, y + 1) == 2)//check that spot is still empty
 		{
-			setTempBoard(x, y, getTempBoard(x, y + 1));//swap spots
+			setTempBoard(x, y, getTempBoard(x + direction, y + 1));//swap spots
 			setTempBoard(x + direction, y + 1, 1);
 			return;
 		}
@@ -121,7 +121,7 @@ void runSim()
 {
 	for (int y = SCREEN_HEIGHT - 2; y > 1; y--)
 	{
-		for (int x = 2; x < SCREEN_WIDTH; x++)
+		for (int x = 2; x < SCREEN_WIDTH-1; x++)
 		{
 			if (getBoard(x, y) == 1)
 			{
@@ -246,7 +246,7 @@ void drawScreen()
 		{
 			switch (getBoard(x, y)) {
 			case 1:
-				SDL_SetRenderDrawColor(gRenderer, 194, 178, 128, 0xFF);
+				SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);
 				SDL_RenderDrawPoint(gRenderer, x, y);
 				break;
 			case 2:
@@ -254,7 +254,7 @@ void drawScreen()
 				SDL_RenderDrawPoint(gRenderer, x, y);
 				break;
 			case -1:
-				SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);
+				SDL_SetRenderDrawColor(gRenderer, 194, 178, 128, 0xFF);
 				SDL_RenderDrawPoint(gRenderer, x, y);
 				break;
 			}
@@ -389,12 +389,14 @@ int main(int argc, char* args[])
 	setTempBoard(6, 6, 1);
 	setTempBoard(7, 6, 1);
 	setTempBoard(8, 6, 1);
+	setBoard(8, 6, 0);
+	cout << getBoard(8, 6) << " " << getTempBoard(8, 6);
 	copyBoard();
 	emptyTempBoard();
 	drawScreen();
-	
 
 
+	//int donee = 100;
 	while (!quit)
 	{
 		while (SDL_PollEvent(&e) != 0)
@@ -407,6 +409,13 @@ int main(int argc, char* args[])
 		}
 		runSim();
 		drawScreen();
+		//if(donee > 0)
+		//{ 
+			setTempBoard(SCREEN_WIDTH / 2, 2, 1);
+			//donee--;
+			
+		//}
+		
 	}
 	close();
 	return 0;
